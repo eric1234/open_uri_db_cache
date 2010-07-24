@@ -1,6 +1,6 @@
 # Data object to store feed info in database.
 class OpenURI::DbCache::Page < ActiveRecord::Base
-  set_table_name 'open_uri_cache_'
+  set_table_name 'open_uri_cache_page'
 
   cattr_accessor :fetch_limit
   self.fetch_limit = 4.hours
