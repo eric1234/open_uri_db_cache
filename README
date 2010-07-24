@@ -1,0 +1,77 @@
+A database-backed HTTP caching library for open_uri. Just use open_uri
+like normal and any URL's requested more than once will be served from
+the database to speed up requests and be a better net citizen to other
+web servers.
+
+= USAGE
+
+So with the standard library you do something like:
+
+    require 'open-uri'
+    puts open(url).read
+
+With OpenURI::DbCache you change the above code to:
+
+    require 'open_uri_db_cache'
+    puts open(url).read
+
+= CACHE MANAGEMENT
+
+To manually clear the cache for a specific feed use the following code:
+
+    OpenURI::DbCache::Page.find_by_url(url).destroy
+
+To completely clear the cache for all URL's the following code can be used:
+
+    OpenURI::DbCache::Page.destroy_all
+
+= CONFIGURATION
+
+A major goal of this library is for the most part not have to deal with
+it. Just include the gem and continue as normal. But we do have one
+configuration option.
+
+    # Configure how long to wait before even trying to fetch again.
+    OpenURI::DbCache::Page.fetch_limit = 8.hours
+
+There are also some other options that you can configure using standard
+ActiveRecord methods.
+
+= CACHE STORAGE
+
+The cache is stored in the database and ActiveRecord is used to do
+the updating. All tables used by the library are prefixed with the
+string "open_uri_cache_".
+
+If the tables are not detected in your database the library will
+automatically create the tables so no migration script needs to be
+run. You can manually setup the database by calling:
+
+    OpenURI::DbCache.setup
+
+
+NOTE: Just because this library uses ActiveRecord does not mean you
+have to use ActiveRecord but if you are not using ActiveRecord you will
+need to establish a connection to some database prior to using the
+library. So:
+
+    ActiveRecord::Base.establish_connection ....
+
+If you don't like the idea of storing in a database you can always just
+point it to a SQLite file or even an in-memory SQLite database.
+
+= Similar Libraries
+
+There are some other libraries that provide similar functionality. If
+this library does not meet your needs you might want to check them out.
+
+  open-uri-memcached::
+    Uses memcached instead of a database backend. Also has optional
+    integration with the Rails cache. Does NOT take If-Modified-Since
+    and ETag headers into account when expiring the cache.
+    http://github.com/benschwarz/open-uri-memcached
+
+  open-uri-cached::
+    Uses a filesystem cache instead of a database backend. Does NOT
+    take If-Modified-Since and ETag headers into account.  
+    http://github.com/tigris/open-uri-cached
