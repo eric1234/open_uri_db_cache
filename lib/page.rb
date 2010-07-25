@@ -25,6 +25,8 @@ class OpenURI::DbCache::Page < ActiveRecord::Base
       page.checked_at = Time.now
       begin
         io = OpenURI.original_open_uri url, headers
+        return block_given? ? blk[io] : io unless
+          io.content_type =~ /text/ || io.content_type =~ /xml/
         page.modified_at = io.last_modified || Time.now rescue Time.now
         page.etag = io.meta['etag'] if io.meta['etag'].present?
         page.content = io.read
@@ -34,11 +36,7 @@ class OpenURI::DbCache::Page < ActiveRecord::Base
       page.save!
     end
     io = StringIO.new page.content
-    if block_given?
-      blk[io]
-    else
-      io
-    end
+    block_given? ? blk[io] : io
   end
 
   Test 'not cached' do
