@@ -5,6 +5,9 @@ class OpenURI::DbCache::Page < ActiveRecord::Base
   cattr_accessor :fetch_limit
   self.fetch_limit = 4.hours
 
+  cattr_accessor :cache_types
+  self.cache_types = [/text/, /xml/]
+
   # Use same options are OpenURI so we can pass the same params
   # to the real method
   def self.fetch(url, *args, &blk)
@@ -26,7 +29,7 @@ class OpenURI::DbCache::Page < ActiveRecord::Base
       begin
         io = OpenURI.original_open_uri url, headers
         return block_given? ? blk[io] : io unless
-          io.content_type =~ /text/ || io.content_type =~ /xml/
+          cache_types.any? {|t| io.content_type =~ t}
         page.modified_at = io.last_modified || Time.now rescue Time.now
         page.etag = io.meta['etag'] if io.meta['etag'].present?
         page.content = io.read

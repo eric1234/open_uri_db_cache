@@ -28,11 +28,26 @@ To completely clear the cache for all URL's the following code can be used:
 = CONFIGURATION
 
 A major goal of this library is for the most part not have to deal with
-it. Just include the gem and continue as normal. But we do have one
-configuration option.
+it. Just include the gem and continue as normal. But we do have a few
+bit of configuration available
 
     # Configure how long to wait before even trying to fetch again.
+    # After this time period If-Modified-Since and ETag checking is
+    # still done. But until this time has passed we don't even bother
+    # checking those and just assume the cache is good.
     OpenURI::DbCache::Page.fetch_limit = 8.hours
+
+    # Configure what mime types should be cached. Is an array of
+    # regexps with the default being:
+    #
+    #     [/text/, /xml/] 
+    #
+    # This is used primarily to ensure we are only caching non-binary
+    # resources as most database do not support storing binary data
+    # (or at least they do so in inconsistant ways). Since the primary
+    # purpose of this library is to cache things like RSS feeds
+    # restricting to non-binary data is ok.
+    OpenURI::DbCache::Page.cache_types << /foo/
 
 There are also some other options that you can configure using standard
 ActiveRecord methods.
