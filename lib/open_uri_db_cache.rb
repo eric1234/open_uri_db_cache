@@ -47,6 +47,6 @@ module OpenURI
   end
 end
 
-require 'transparent'
-require 'page'
-require 'schema'
+require 'open_uri/transparent'
+require 'open_uri/page'
+require 'open_uri/schema'

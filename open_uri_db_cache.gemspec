@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'open_uri_db_cache'
-  s.version = '0.0.3'
+  s.version = '0.0.4'
   s.homepage = 'http://wiki.github.com/eric1234/open_uri_db_cache/'
   s.author = 'Eric Anderson'
   s.email = 'eric@pixelwareinc.com'
