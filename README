@@ -90,3 +90,10 @@ this library does not meet your needs you might want to check them out.
     Uses a filesystem cache instead of a database backend. Does NOT
     take If-Modified-Since and ETag headers into account.  
     http://github.com/tigris/open-uri-cached
+
+= CREDIT
+
+This gem was developed by Eric Anderson (http://pixelwareinc.com) for
+the call recording service SaveYourCall.com (http://saveyourcall.com).
+Some minor enhancements were done while working under Red Tusk
+Studios (http://redtusk.com).
